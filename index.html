@@ -29,7 +29,7 @@
       left: 0;
       top: 0;
     }
-    #start {
+    #start, #pause {
       background-color: #AF4C50; /* Green */
       border: none;
       color: white;
@@ -39,6 +39,15 @@
       display: inline-block;
       font-size: 16px;
     }
+
+    #pause {
+      background-color:  Green
+    }
+
+    #buttonContainer {
+      position: fixed;
+      top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -46,12 +55,16 @@
     <pre width="300" id="displayerBG"></pre>
     <pre width="300" id="displayer"></pre>
   </div>
-  <textarea rows="20" cols="40" id="script" cols="30" rows="10"></textarea>
-  <br />
-  <input type="number" id="wordPM" value="200" size="5" />字/分钟
-  <br />
-  <br />
-  <button id="start">开始</button>
+  <div id="buttonContainer">
+    <textarea rows="20" cols="40" id="script" cols="30" rows="10"></textarea>
+    <br />
+    <input type="number" id="wordPM" value="200" size="5" />字/分钟
+    <br />
+    <br />
+    <button id="start">启动</button>
+    <button id="pause">暂停</button>
+  </div>
+  
   <script>
 
     
@@ -60,26 +73,48 @@
     let displayerBG = document.getElementById('displayerBG');
     let scriptContainer = document.getElementById('script');
     let startButton = document.getElementById('start');
+    let pauseButton = document.getElementById('pause');
     let wordPerMinInput = document.getElementById('wordPM');
     let interval;
+    let pause = false;
+
+    pauseButton.addEventListener('click', ()=> {
+      pause = !pause;
+      if(pause) {
+        stopDisplay()
+        pauseButton.innerHTML = "开始"
+      } else {
+        startDisplay()
+        pauseButton.innerHTML = "暂停"
+      }
+    })
 
     startButton.addEventListener('click', ()=> {
+      pos=0;
+      pause=false;
+      startDisplay();
+    })
+
+    function startDisplay() {
       if(interval) {
-        clearInterval(interval);
-        interval = null;
+        stopDisplay()
       };
-      i=0
-      let script = scriptContainer.value;
       let wordPerMin = wordPerMinInput.value;
-      displayerBG.innerHTML = script
+      let script = scriptContainer.value;
+      displayerBG.innerHTML = script;
       interval = setInterval(()=> {
-        document.getElementById('displayer').innerHTML = (script.substr(0, i));
-        if(++i > script.length) {
-          clearInterval(interval);
-          interval = null
+        console.log("---");
+        displayer.innerHTML = (script.substr(0, pos));
+        if(++pos > script.length) {
+          stopDisplay()
         }
       }, 60000/wordPerMin)
-    })
+    }
+
+    function stopDisplay() {
+      clearInterval(interval);
+      interval = null
+    }
   </script>
 </body>
 </html>
