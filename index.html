@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container {
+      float: right;
+      width: 800px;
+      position: relative;
+    }
+    #displayerBG {
+      white-space: pre-wrap;
+      width: 500px;
+      height: auto;
+      font-size: 20px;
+      position: absolute;
+      color:#CCC;
+      left: 0;
+      top: 0;
+    }
+    #displayer {
+      white-space: pre-wrap;
+      width: 500px;
+      height: auto;
+      font-size: 20px;
+      position: absolute;      
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <pre width="300" id="displayerBG"></pre>
+    <pre width="300" id="displayer"></pre>
+  </div>
+  <textarea id="script" cols="30" rows="10"></textarea>
+  <button id="start">开始</button>
+  <input type="number" id="wordPM" value="200" />
+  <script>
+
+    
+    let i = 0;
+    let displayer = document.getElementById('displayer');
+    let displayerBG = document.getElementById('displayerBG');
+    let scriptContainer = document.getElementById('script');
+    let startButton = document.getElementById('start');
+    let wordPerMinInput = document.getElementById('wordPM');
+    let interval;
+
+    startButton.addEventListener('click', ()=> {
+      if(interval) {
+        clearInterval(interval);
+        interval = null;
+      };
+      let script = scriptContainer.value;
+      let wordPerMin = wordPerMinInput.value;
+      displayerBG.innerHTML = script
+      interval = setInterval(()=> {
+        document.getElementById('displayer').innerHTML = (script.substr(0, i));
+        if(++i >= script.length) {
+          clearInterval(interval);
+          interval = null
+        }
+      }, 60000/wordPerMin)
+    })
+  </script>
+</body>
+</html>
