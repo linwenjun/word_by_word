@@ -61,7 +61,7 @@
       displayerBG.innerHTML = script
       interval = setInterval(()=> {
         document.getElementById('displayer').innerHTML = (script.substr(0, i));
-        if(++i >= script.length) {
+        if(++i > script.length) {
           clearInterval(interval);
           interval = null
         }
